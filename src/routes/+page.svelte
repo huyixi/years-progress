@@ -8,14 +8,28 @@
 	const MS_PER_DAY = MS_PER_HOUR * 24;
 
 	// Get current year progress as a percentage
-	function getYearProgress() {
+	function getYearPercentage() {
 		const now = new Date();
 		const startOfYear = new Date(now.getFullYear(), 0, 1);
 		const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
 		return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 	}
 
-	// Get remaining time until the end of the year
+	function formatDate(date, format) {
+		const padZero = (num) => (num < 10 ? `0${num}` : num);
+
+		const parts = {
+			YYYY: date.getFullYear(),
+			MM: padZero(date.getMonth() + 1),
+			DD: padZero(date.getDate()),
+			HH: padZero(date.getHours()),
+			mm: padZero(date.getMinutes()),
+			ss: padZero(date.getSeconds())
+		};
+
+		return format.replace(/YYYY|MM|DD|HH|mm|ss/g, (match) => parts[match]);
+	}
+
 	function getRemainingTime() {
 		const now = new Date();
 		const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
@@ -29,15 +43,14 @@
 		return { days, hours, minutes, seconds };
 	}
 
-	let currentTime = new Date().toLocaleString();
-	let progress = getYearProgress().toFixed(6);
+	let currentTime = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss');
+	let progress = getYearPercentage().toFixed(6);
 	let remainingTime = getRemainingTime();
 
-	// Update every 250ms
 	onMount(() => {
 		const interval = setInterval(() => {
-			currentTime = new Date().toLocaleString();
-			progress = getYearProgress().toFixed(6);
+			currentTime = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss');
+			progress = getYearPercentage().toFixed(6);
 			remainingTime = getRemainingTime();
 		}, 250);
 
@@ -47,7 +60,7 @@
 
 <div class="main">
 	<h1>2024 Progress</h1>
-	<p>Current Time: {currentTime}</p>
+	<p>{currentTime}</p>
 
 	<div class="progress-container">
 		<div class="progress-bar" style="width: {progress}%;">
@@ -56,7 +69,6 @@
 	</div>
 
 	<p>
-		Remaining:
 		{remainingTime.days} days,
 		{remainingTime.hours} hours,
 		{remainingTime.minutes} minutes,
@@ -68,7 +80,7 @@
 	.main {
 		font-family: Arial, sans-serif;
 		text-align: center;
-		margin: 36vh auto;
+		margin: 32vh auto;
 		width: 80%;
 	}
 
