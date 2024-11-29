@@ -8,7 +8,7 @@
 	const MS_PER_DAY = MS_PER_HOUR * 24;
 
 	// Get current year progress as a percentage
-	function getYearProgress() {
+	function getYearPercentage() {
 		const now = new Date();
 		const startOfYear = new Date(now.getFullYear(), 0, 1);
 		const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
@@ -29,15 +29,29 @@
 		return { days, hours, minutes, seconds };
 	}
 
-	let currentTime = new Date().toLocaleString();
-	let progress = getYearProgress().toFixed(6);
+	function formatTime(date, format) {
+		const padZero = (num) => (num < 10 ? `0${num}` : num);
+
+		const parts = {
+			YYYY: date.getFullYear(),
+			MM: padZero(date.getMonth() + 1),
+			DD: padZero(date.getDate()),
+			HH: padZero(date.getHours()),
+			mm: padZero(date.getMinutes()),
+			ss: padZero(date.getSeconds())
+		};
+
+		return format.replace(/YYYY|MM|DD|HH|mm|ss/g, (match) => parts[match]);
+	}
+
+	let currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
+	let progress = getYearPercentage().toFixed(6);
 	let remainingTime = getRemainingTime();
 
-	// Update every 250ms
 	onMount(() => {
 		const interval = setInterval(() => {
-			currentTime = new Date().toLocaleString();
-			progress = getYearProgress().toFixed(6);
+			progress = getYearPercentage().toFixed(6);
+			currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
 			remainingTime = getRemainingTime();
 		}, 250);
 
@@ -47,16 +61,16 @@
 
 <div class="main">
 	<h1>2024 Progress</h1>
-	<p>Current Time: {currentTime}</p>
+	<p>{currentTime}</p>
 
 	<div class="progress-container">
-		<div class="progress-bar" style="width: {progress}%;">
+		<p class="progress-text">
 			{progress}%
-		</div>
+		</p>
+		<div class="progress-bar" style="width: {progress}%;"></div>
 	</div>
 
 	<p>
-		Remaining:
 		{remainingTime.days} days,
 		{remainingTime.hours} hours,
 		{remainingTime.minutes} minutes,
@@ -73,6 +87,7 @@
 	}
 
 	.progress-container {
+		position: relative;
 		background: #39d353;
 		border-radius: 10px;
 		overflow: hidden;
@@ -87,6 +102,14 @@
 		line-height: 30px;
 		color: #000;
 		font-size: 14px;
+	}
+
+	.progress-text {
+		position: absolute;
+		z-index: 10;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
 	}
 
 	p {
