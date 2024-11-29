@@ -13,7 +13,7 @@
 		return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 	}
 
-	function formatDate(date, format) {
+	function formatTime(date, format) {
 		const padZero = (num) => (num < 10 ? `0${num}` : num);
 
 		const parts = {
@@ -41,21 +41,6 @@
 		return { days, hours, minutes, seconds };
 	}
 
-	function formatTime(date, format) {
-		const padZero = (num) => (num < 10 ? `0${num}` : num);
-
-		const parts = {
-			YYYY: date.getFullYear(),
-			MM: padZero(date.getMonth() + 1),
-			DD: padZero(date.getDate()),
-			HH: padZero(date.getHours()),
-			mm: padZero(date.getMinutes()),
-			ss: padZero(date.getSeconds())
-		};
-
-		return format.replace(/YYYY|MM|DD|HH|mm|ss/g, (match) => parts[match]);
-	}
-
 	let currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
 	let progress = getYearPercentage().toFixed(6);
 	let remainingTime = getRemainingTime();
@@ -74,14 +59,12 @@
 <div class="main">
 	<h1>2024 Progress</h1>
 	<p>{currentTime}</p>
-
 	<div class="progress-container">
 		<p class="progress-text">
 			{progress}%
 		</p>
 		<div class="progress-bar" style="width: {progress}%;"></div>
 	</div>
-
 	<p>
 		{remainingTime.days} days,
 		{remainingTime.hours} hours,
@@ -92,10 +75,8 @@
 
 <style>
 	.main {
-		font-family: Arial, sans-serif;
 		text-align: center;
-		margin: 32vh auto;
-		width: 80%;
+		margin-top: 50%;
 	}
 
 	.progress-container {
@@ -103,8 +84,9 @@
 		background: #39d353;
 		border-radius: 10px;
 		overflow: hidden;
-		margin: 20px 0;
+		margin: 20px auto;
 		height: 30px;
+		width: 80%;
 	}
 
 	.progress-bar {
