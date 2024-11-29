@@ -76,7 +76,7 @@
 <style>
 	.main {
 		text-align: center;
-		margin-top: 50%;
+		margin-top: max(40vh, 3rem);
 	}
 
 	.progress-container {
