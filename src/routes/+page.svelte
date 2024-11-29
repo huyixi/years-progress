@@ -15,7 +15,21 @@
 		return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 	}
 
-	// Get remaining time until the end of the year
+	function formatDate(date, format) {
+		const padZero = (num) => (num < 10 ? `0${num}` : num);
+
+		const parts = {
+			YYYY: date.getFullYear(),
+			MM: padZero(date.getMonth() + 1),
+			DD: padZero(date.getDate()),
+			HH: padZero(date.getHours()),
+			mm: padZero(date.getMinutes()),
+			ss: padZero(date.getSeconds())
+		};
+
+		return format.replace(/YYYY|MM|DD|HH|mm|ss/g, (match) => parts[match]);
+	}
+
 	function getRemainingTime() {
 		const now = new Date();
 		const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
@@ -29,6 +43,7 @@
 		return { days, hours, minutes, seconds };
 	}
 
+<<<<<<< HEAD
 	function formatTime(date, format) {
 		const padZero = (num) => (num < 10 ? `0${num}` : num);
 
@@ -45,13 +60,21 @@
 	}
 
 	let currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
+=======
+	let currentTime = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss');
+>>>>>>> 8fef8eb686183dd65eb13ade85908c7eb83b081a
 	let progress = getYearPercentage().toFixed(6);
 	let remainingTime = getRemainingTime();
 
 	onMount(() => {
 		const interval = setInterval(() => {
+<<<<<<< HEAD
 			progress = getYearPercentage().toFixed(6);
 			currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
+=======
+			currentTime = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss');
+			progress = getYearPercentage().toFixed(6);
+>>>>>>> 8fef8eb686183dd65eb13ade85908c7eb83b081a
 			remainingTime = getRemainingTime();
 		}, 250);
 
@@ -82,7 +105,7 @@
 	.main {
 		font-family: Arial, sans-serif;
 		text-align: center;
-		margin: 36vh auto;
+		margin: 32vh auto;
 		width: 80%;
 	}
 
