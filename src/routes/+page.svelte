@@ -1,13 +1,11 @@
 <script>
 	import { onMount } from 'svelte';
 
-	// Constants for time calculations
 	const MS_PER_SECOND = 1000;
 	const MS_PER_MINUTE = MS_PER_SECOND * 60;
 	const MS_PER_HOUR = MS_PER_MINUTE * 60;
 	const MS_PER_DAY = MS_PER_HOUR * 24;
 
-	// Get current year progress as a percentage
 	function getYearPercentage() {
 		const now = new Date();
 		const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -43,7 +41,6 @@
 		return { days, hours, minutes, seconds };
 	}
 
-<<<<<<< HEAD
 	function formatTime(date, format) {
 		const padZero = (num) => (num < 10 ? `0${num}` : num);
 
@@ -60,21 +57,13 @@
 	}
 
 	let currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
-=======
-	let currentTime = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss');
->>>>>>> 8fef8eb686183dd65eb13ade85908c7eb83b081a
 	let progress = getYearPercentage().toFixed(6);
 	let remainingTime = getRemainingTime();
 
 	onMount(() => {
 		const interval = setInterval(() => {
-<<<<<<< HEAD
 			progress = getYearPercentage().toFixed(6);
 			currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
-=======
-			currentTime = formatDate(new Date(), 'YYYY-MM-DD HH:mm:ss');
-			progress = getYearPercentage().toFixed(6);
->>>>>>> 8fef8eb686183dd65eb13ade85908c7eb83b081a
 			remainingTime = getRemainingTime();
 		}, 250);
 
