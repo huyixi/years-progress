@@ -85,7 +85,7 @@
 		background: #f0f0f0;
 		text-align: center;
 		line-height: 30px;
-		color: #fff;
+		color: #000;
 		font-size: 14px;
 	}
 
