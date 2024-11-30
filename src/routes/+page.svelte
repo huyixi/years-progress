@@ -13,9 +13,9 @@
 		const startOfYear = new Date(now.getFullYear(), 0, 1);
 		const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
 		if (isRemainingTime) {
-			return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
-		} else {
 			return ((endOfYear - now) / (endOfYear - startOfYear)) * 100;
+		} else {
+			return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 		}
 	}
 
@@ -89,7 +89,7 @@
 		</p>
 		<div
 			class="progress-bar"
-			style="width: {yearPercentage}%;margin-left:{isRemainingTime ? '0' : 'auto'}"
+			style="width: {100 - yearPercentage}%; margin-left: {isRemainingTime ? '0' : 'auto'};"
 		></div>
 	</div>
 	<p>
