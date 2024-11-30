@@ -7,6 +7,7 @@
 	const MS_PER_DAY = MS_PER_HOUR * 24;
 
 	let isRemainingTime = true;
+	let currentYear = new Date().getFullYear();
 
 	function getYearPercentage() {
 		const now = new Date();
@@ -81,7 +82,7 @@
 </script>
 
 <div class="main">
-	<h1>2024 Progress</h1>
+	<h1>{currentYear} Progress</h1>
 	<p>{currentTime}</p>
 	<div class="progress-container" style="background: {isRemainingTime ? '#39d353' : 'red'}">
 		<p class="progress-text">
