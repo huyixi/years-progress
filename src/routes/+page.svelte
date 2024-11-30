@@ -6,11 +6,17 @@
 	const MS_PER_HOUR = MS_PER_MINUTE * 60;
 	const MS_PER_DAY = MS_PER_HOUR * 24;
 
+	let isRemainingTime = true;
+
 	function getYearPercentage() {
 		const now = new Date();
 		const startOfYear = new Date(now.getFullYear(), 0, 1);
 		const endOfYear = new Date(now.getFullYear() + 1, 0, 1);
-		return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+		if (isRemainingTime) {
+			return ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+		} else {
+			return ((endOfYear - now) / (endOfYear - startOfYear)) * 100;
+		}
 	}
 
 	function formatTime(date, format) {
@@ -41,36 +47,60 @@
 		return { days, hours, minutes, seconds };
 	}
 
+	function getElapsedTime() {
+		const now = new Date();
+		const startOfYear = new Date(now.getFullYear(), 0, 1);
+		const elapsed = now - startOfYear;
+
+		const days = Math.floor(elapsed / MS_PER_DAY);
+		const hours = Math.floor((elapsed % MS_PER_DAY) / MS_PER_HOUR);
+		const minutes = Math.floor((elapsed % MS_PER_HOUR) / MS_PER_MINUTE);
+		const seconds = Math.floor((elapsed % MS_PER_MINUTE) / MS_PER_SECOND);
+
+		return { days, hours, minutes, seconds };
+	}
+
+	function handleTimeSwitch() {
+		isRemainingTime = !isRemainingTime;
+	}
+
 	let currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
-	let progress = getYearPercentage().toFixed(6);
-	let remainingTime = getRemainingTime();
+	let yearPercentage = getYearPercentage().toFixed(6);
 
 	onMount(() => {
 		const interval = setInterval(() => {
-			progress = getYearPercentage().toFixed(6);
+			yearPercentage = getYearPercentage().toFixed(6);
 			currentTime = formatTime(new Date(), 'YYYY-MM-DD HH:mm:ss');
-			remainingTime = getRemainingTime();
+			timeDisplay = isRemainingTime ? getRemainingTime() : getElapsedTime();
 		}, 250);
 
 		return () => clearInterval(interval);
 	});
+
+	$: timeDisplay = isRemainingTime ? getRemainingTime() : getElapsedTime();
 </script>
 
 <div class="main">
 	<h1>2024 Progress</h1>
 	<p>{currentTime}</p>
-	<div class="progress-container">
+	<div class="progress-container" style="background: {isRemainingTime ? '#39d353' : 'red'}">
 		<p class="progress-text">
-			{progress}%
+			{yearPercentage}%
 		</p>
-		<div class="progress-bar" style="width: {progress}%;"></div>
+		<div
+			class="progress-bar"
+			style="width: {yearPercentage}%;margin-left:{isRemainingTime ? '0' : 'auto'}"
+		></div>
 	</div>
 	<p>
-		{remainingTime.days} days,
-		{remainingTime.hours} hours,
-		{remainingTime.minutes} minutes,
-		{remainingTime.seconds} seconds
+		{timeDisplay.days} days,
+		{timeDisplay.hours} hours,
+		{timeDisplay.minutes} minutes,
+		{timeDisplay.seconds} seconds
 	</p>
+	<button class="btn-switch" on:click={handleTimeSwitch}
+		>Switch to {isRemainingTime ? 'Elapsed' : 'Remaining'} Time</button
+	>
 </div>
 
 <style>
@@ -100,13 +130,8 @@
 
 	.progress-text {
 		position: absolute;
-		z-index: 10;
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
-	}
-
-	p {
-		color: #555;
 	}
 </style>
